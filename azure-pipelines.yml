@@ -57,6 +57,12 @@ jobs:
       ls -alth $(Build.StagingDirectory)/*/*.whl
       devpi upload $(Build.StagingDirectory)/*/*.whl
     displayName: bootstrap devpi
+
+  - script: "python3.7 -m pip install -U pytest  requests"
+    displayName: install pytest
+  - script: "env MASTER_WHEELS=$(Build.StagingDirectory) PIP_INDEX_URL=http://localhost:3141/test/dev python3.7 -m pytest tests"
+    displayName: run tests
+
   - script: devpi-server --stop
     condition: succeededOrFailed()
     displayName: stop devpi
